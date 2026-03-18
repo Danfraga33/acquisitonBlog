@@ -1,9 +1,19 @@
+import { Link } from "react-router";
+
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center px-6 overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-background to-background" />
+      {/* Background image */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url("/bg.jpg")' }}
+      />
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-black/50" />
+      {/* Bottom fade into next section bg-secondary/30 */}
+      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black to-transparent" />
       <div className="relative z-10 max-w-4xl mx-auto text-center">
-        <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-6">
+        <p className="text-sm tracking-[0.3em] uppercase mb-6">
           A Personal Chronicle
         </p>
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif leading-[1.1] mb-8">
@@ -17,18 +27,18 @@ export function HeroSection() {
           the unfiltered story of acquiring a company.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="#about"
+          <Link
+            to="#about"
             className="px-8 py-3 bg-primary text-primary-foreground rounded-full text-sm tracking-wide hover:opacity-90 transition-opacity"
           >
             Start Reading
-          </a>
-          <a
-            href="#posts"
+          </Link>
+          <Link
+            to="#posts"
             className="px-8 py-3 border border-border rounded-full text-sm tracking-wide hover:bg-accent transition-colors"
           >
             Latest Posts
-          </a>
+          </Link>
         </div>
       </div>
       <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
