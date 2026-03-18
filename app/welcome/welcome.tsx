@@ -5,6 +5,7 @@ import { AboutSection } from "components/about-section";
 import { StatsSection } from "components/stats-section";
 import { LatestPosts } from "components/latest-posts";
 import { ContactSection } from "components/contact-section";
+import { Footer } from "components/footer";
 
 export function Welcome() {
   return (
@@ -25,11 +26,7 @@ export function Welcome() {
         <LatestPosts />
         <ContactSection />
       </main>
-      <footer className="py-12 border-t border-border text-center">
-        <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground">
-          © 2026 Fraga Ventures
-        </p>
-      </footer>
+      <Footer />
     </>
   );
 }
