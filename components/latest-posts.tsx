@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router";
 import { supabase, type Post } from "../lib/supabase";
 
 export function LatestPosts() {
@@ -28,9 +29,9 @@ export function LatestPosts() {
             </p>
             <h2 className="text-3xl md:text-5xl font-serif">Latest Updates</h2>
           </div>
-          <a href="/blog" className="mt-4 md:mt-0 text-sm text-primary hover:underline underline-offset-4">
+          <Link to="/blog" className="mt-4 md:mt-0 text-sm text-primary hover:underline underline-offset-4">
             View all posts →
-          </a>
+          </Link>
         </div>
 
         {loading ? (
@@ -47,9 +48,9 @@ export function LatestPosts() {
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post) => (
-              <a
+              <Link
                 key={post.id}
-                href={`/posts/${post.slug}`}
+                to={`/posts/${post.slug}`}
                 className="group block p-6 bg-card border border-border rounded-lg hover:border-primary/50 transition-colors"
               >
                 <div className="flex items-center justify-between mb-4">
@@ -71,7 +72,7 @@ export function LatestPosts() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M7 7h10v10" />
                   </svg>
                 </div>
-              </a>
+              </Link>
             ))}
           </div>
         )}

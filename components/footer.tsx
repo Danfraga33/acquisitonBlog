@@ -1,11 +1,5 @@
-const links = [
-  { label: "Deal Journal", href: "#posts" },
-  { label: "Frameworks", href: "#posts" },
-  { label: "Structured Notes", href: "#posts" },
-  { label: "Learnings", href: "#posts" },
-  { label: "Operator Lens", href: "#posts" },
-  { label: "Behind the Scenes", href: "#posts" },
-];
+import { Link } from "react-router";
+import { EXPLORE_PAGES } from "./data";
 
 export function Footer() {
   return (
@@ -28,34 +22,34 @@ export function Footer() {
               Topics
             </p>
             <ul className="space-y-2">
-              {links.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
+              {EXPLORE_PAGES.map((page) => (
+                <li key={page.title}>
+                  <Link
+                    to={page.href}
                     className="text-sm text-foreground/60 hover:text-primary transition-colors"
                   >
-                    {link.label}
-                  </a>
+                    {page.title}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Connect */}
           <div>
             <p className="text-xs tracking-[0.3em] uppercase text-muted-foreground mb-4">
               Connect
             </p>
             <ul className="space-y-2">
               <li>
-                <a href="#contact" className="text-sm text-foreground/60 hover:text-primary transition-colors">
+                <Link to="/#contact" className="text-sm text-foreground/60 hover:text-primary transition-colors">
                   Get in Touch
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#about" className="text-sm text-foreground/60 hover:text-primary transition-colors">
+                <Link to="/#about" className="text-sm text-foreground/60 hover:text-primary transition-colors">
                   About
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

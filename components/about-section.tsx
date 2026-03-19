@@ -1,6 +1,9 @@
+import { Link } from "react-router"
+
 export function AboutSection() {
   return (
-    <section id="about" className="py-24 md:py-32 px-6 bg-secondary/30">
+    <section id="about" className="relative py-24 md:py-32 px-6 bg-secondary/30">
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-black to-transparent pointer-events-none" />
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-2 gap-12 md:gap-20 items-center">
           <div>
@@ -27,13 +30,12 @@ export function AboutSection() {
             </p>
             
             <div className="pt-4">
-              <a
-                href="#posts"
-                className="inline-flex items-center gap-2 text-primary hover:underline underline-offset-4"
+              <Link to="#posts"
+                className="hover:transition-all inline-flex items-center gap-2 text-primary hover:underline underline-offset-4 hover:duration-300"
               >
                 Read the latest updates
                 <span aria-hidden="true">→</span>
-              </a>
+              </Link>
             </div>
           </div>
         </div>
