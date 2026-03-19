@@ -6,12 +6,12 @@ export function HeroSection() {
       {/* Background image */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url("/bg.jpg")' }}
+        style={{ backgroundImage: 'url("/bg-lakehouse.avif")' }}
       />
       {/* Dark overlay for readability */}
       <div className="absolute inset-0 bg-black/50" />
       {/* Bottom fade into next section bg-secondary/30 */}
-      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-black to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-transparent to-black" />
       <div className="relative z-10 max-w-4xl mx-auto text-center">
         <p className="text-sm tracking-[0.3em] uppercase mb-6">
           A Personal Chronicle
