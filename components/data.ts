@@ -60,10 +60,10 @@ export const STATS = [
 ];
 
 export const EXPLORE_PAGES = [
-  { title: "Deal Journal", href: "/page-1" },
-  { title: "Frameworks", href: "/page-2" },
-  { title: "Structured Notes", href: "/page-3" },
-  { title: "Learnings", href: "/page-4" },
-  { title: "Operator Lens", href: "/page-5" },
-  { title: "Behind the Scenes", href: "/page-6" },
+  { title: "Deal Journal", href: "/category/deal-journal" },
+  { title: "Frameworks", href: "/category/frameworks" },
+  { title: "Structured Notes", href: "/category/structured-notes" },
+  { title: "Learnings", href: "/category/learnings" },
+  { title: "Operator Lens", href: "/category/operator-lens" },
+  { title: "Behind the Scenes", href: "/category/behind-the-scenes" },
 ];
