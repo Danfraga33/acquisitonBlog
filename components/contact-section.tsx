@@ -4,7 +4,7 @@ export function ContactSection() {
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-16">
           <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-4">Get in Touch</p>
-          <h3 className="text-3xl md:text-4xl font-serif mb-4">Connect with Fraga Ventures</h3>
+          <h3 className="text-3xl md:text-4xl font-serif mb-4">Connect</h3>
           <div className="h-px w-24 bg-primary mx-auto opacity-50" />
         </div>
         <form className="space-y-8">
