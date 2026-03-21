@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div>
             <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-3">
-              Acquisition Ledger
+              Closing Notes
             </p>
             <p className="text-xs text-muted-foreground leading-relaxed max-w-xs">
               Documenting every step of the path to business ownership — unfiltered.
@@ -57,7 +57,7 @@ export function Footer() {
 
         <div className="border-t border-border pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground">
-            © 2026 Acquisition Ledger
+            © 2026 Closing Notes
           </p>
           <p className="text-xs text-muted-foreground/50">
             The Acquisition Journey
