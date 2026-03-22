@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Skill(update-config)",
+      "Skill(update-config:*)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\danfr\\OneDrive\\Desktop\\Net Worth\\FragaVentures\\Online Brand\\acquisitionBlog"
+    ]
+  }
+}
