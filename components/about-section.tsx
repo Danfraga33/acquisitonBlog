@@ -23,7 +23,7 @@ export function AboutSection() {
           <div className="space-y-6">
             <p className="text-muted-foreground text-lg leading-relaxed">
               Always knew I'd own something. This blog is the record of actually
-              doing it — the search for the right business, the deals that
+              doing it - the search for the right business, the deals that
               didn't work out, and everything I'm learning along the way.
             </p>
             <p className="text-muted-foreground leading-relaxed">
