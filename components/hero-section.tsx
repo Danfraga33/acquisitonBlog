@@ -21,7 +21,7 @@ export function HeroSection() {
           <br />
           <span className="text-primary">Journey</span>
         </h1>
-        <p className="text-muted-foreground mx-auto mb-12 max-w-2xl text-lg leading-relaxed md:text-xl">
+        <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-white md:text-xl">
           Documenting every step of my path to business ownership. From deal
           sourcing to due diligence, negotiations to closing - the unfiltered
           story of acquiring a company.
