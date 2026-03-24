@@ -8,3 +8,6 @@
 /build/
 
 .vercel
+
+# Serena
+.serena/project.yml
