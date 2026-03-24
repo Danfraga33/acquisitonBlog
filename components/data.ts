@@ -52,11 +52,13 @@ export const POSTS = [
   },
 ];
 
+export const SEARCH_START_DATE = new Date("2025-12-01");
+
 export const STATS = [
-  { value: "14", label: "Months Searching" },
-  { value: "127", label: "Deals Reviewed" },
-  { value: "8", label: "LOIs Submitted" },
-  { value: "1", label: "Business Acquired" },
+  { value: "0", label: "No. Acquisitions" },
+  { value: "32", label: "Deals Reviewed" },
+  { value: "2", label: "LOIs Submitted" },
+  { value: "1", label: "Businesses Under Review" },
 ];
 
 export const EXPLORE_PAGES = [
