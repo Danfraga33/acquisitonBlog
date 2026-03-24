@@ -55,10 +55,10 @@ export const POSTS = [
 export const SEARCH_START_DATE = new Date("2025-12-01");
 
 export const STATS = [
-  { value: "0", label: "No. Acquisitions" },
   { value: "32", label: "Deals Reviewed" },
-  { value: "2", label: "LOIs Submitted" },
-  { value: "1", label: "Businesses Under Review" },
+  { value: "1", label: "LOIs Submitted" },
+  { value: "0", label: "Businesses Under Review" },
+  { value: "0", label: "No. Acquisitions" },
 ];
 
 export const EXPLORE_PAGES = [
