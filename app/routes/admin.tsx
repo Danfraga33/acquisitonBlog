@@ -38,9 +38,7 @@ function PasswordGate({ onAuth }: { onAuth: () => void }) {
           placeholder="Password"
           autoFocus
         />
-        {error && (
-          <p className="text-sm text-red-400">Incorrect password.</p>
-        )}
+        {error && <p className="text-sm text-red-400">Incorrect password.</p>}
         <button
           type="submit"
           className="bg-primary text-primary-foreground w-full rounded-full py-3 text-sm tracking-wide transition-opacity hover:opacity-90"
@@ -136,7 +134,7 @@ export default function AdminPage() {
               >
                 <div className="min-w-0 flex-1">
                   <div className="mb-1 flex items-center gap-3">
-                    <h3 className="truncate font-serif text-lg">
+                    <h3 className="cursor-default truncate font-serif text-lg">
                       {post.title}
                     </h3>
                     <span
@@ -149,7 +147,7 @@ export default function AdminPage() {
                       {post.published ? "Published" : "Draft"}
                     </span>
                   </div>
-                  <div className="text-muted-foreground flex gap-4 text-xs">
+                  <div className="text-muted-foreground flex cursor-default gap-4 text-xs">
                     <span>{post.category}</span>
                     <span>{post.date}</span>
                   </div>
