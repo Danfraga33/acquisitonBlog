@@ -82,7 +82,7 @@ export default function AdminPage() {
     <div className="bg-background min-h-screen px-6 py-12">
       <div className="mx-auto max-w-4xl">
         <div className="mb-12 flex items-center justify-between">
-          <div>
+          <div className="cursor-default">
             <p className="text-muted-foreground mb-2 text-sm tracking-[0.3em] uppercase">
               Admin
             </p>
