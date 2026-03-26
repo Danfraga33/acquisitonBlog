@@ -42,27 +42,48 @@ export function RichEditor({
     setMounted(true);
   }, []);
 
-  function markdownTableToHtml(text: string): string | null {
-    const lines = text.trim().split("\n");
-    if (lines.length < 2) return null;
-
-    const isTableRow = (line: string) => line.trim().startsWith("|") && line.trim().endsWith("|");
-    const isSeparator = (line: string) => /^\|[\s\-:|]+\|/.test(line.trim());
-
-    if (!isTableRow(lines[0]) || !isSeparator(lines[1])) return null;
+  function convertMarkdownTables(text: string): string {
+    const isTableRow = (line: string) => /^\|.+\|$/.test(line.trim());
+    const isSeparator = (line: string) => /^\|[\s\-:|]+\|$/.test(line.trim());
 
     const parseRow = (line: string) =>
       line.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
 
-    const headers = parseRow(lines[0]);
-    const rows = lines.slice(2).filter(isTableRow).map(parseRow);
+    const lines = text.split("\n");
+    const output: string[] = [];
+    let i = 0;
 
-    const headerHtml = headers.map((h) => `<th>${h}</th>`).join("");
-    const rowsHtml = rows
-      .map((row) => `<tr>${row.map((c) => `<td>${c}</td>`).join("")}</tr>`)
-      .join("");
+    while (i < lines.length) {
+      const line = lines[i];
 
-    return `<table><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table>`;
+      // Detect start of markdown table: row followed by separator
+      if (isTableRow(line) && i + 1 < lines.length && isSeparator(lines[i + 1])) {
+        const headers = parseRow(line);
+        i += 2; // skip header and separator
+
+        const rows: string[][] = [];
+        while (i < lines.length && isTableRow(lines[i])) {
+          rows.push(parseRow(lines[i]));
+          i++;
+        }
+
+        const headerHtml = headers.map((h) => `<th>${h}</th>`).join("");
+        const rowsHtml = rows
+          .map((row) => `<tr>${row.map((c) => `<td>${c}</td>`).join("")}</tr>`)
+          .join("");
+
+        output.push(`<table><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table>`);
+      } else {
+        // Regular line — wrap non-empty lines in <p>
+        const trimmed = line.trim();
+        if (trimmed) {
+          output.push(`<p>${trimmed}</p>`);
+        }
+        i++;
+      }
+    }
+
+    return output.join("");
   }
 
   const editor = useEditor({
@@ -85,11 +106,10 @@ export function RichEditor({
       },
       handlePaste(_view, event) {
         const text = event.clipboardData?.getData("text/plain") ?? "";
-        const tableHtml = markdownTableToHtml(text);
-        if (!tableHtml) return false;
+        if (!text.includes("|")) return false;
 
         event.preventDefault();
-        editor?.commands.insertContent(tableHtml);
+        editor?.commands.insertContent(convertMarkdownTables(text));
         return true;
       },
     },
