@@ -1,6 +1,5 @@
 import { useEffect, useRef } from "react";
 import { Link } from "react-router";
-import gsap from "gsap";
 
 export function HeroSection() {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -8,15 +7,18 @@ export function HeroSection() {
   useEffect(() => {
     if (!contentRef.current) return;
 
-    const els = contentRef.current.querySelectorAll("[data-hero]");
-    gsap.set(els, { opacity: 0, y: 50 });
-    gsap.to(els, {
-      opacity: 1,
-      y: 0,
-      duration: 1,
-      ease: "power3.out",
-      stagger: 0.2,
-      delay: 0.3,
+    const els = Array.from(contentRef.current.querySelectorAll("[data-hero]"));
+
+    import("gsap").then(({ gsap }) => {
+      gsap.set(els, { opacity: 0, y: 50 });
+      gsap.to(els, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power3.out",
+        stagger: 0.2,
+        delay: 0.3,
+      });
     });
   }, []);
 

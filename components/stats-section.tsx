@@ -1,11 +1,5 @@
 import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SEARCH_START_DATE, STATS } from "./data";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 function getMonthsSearching() {
   const now = new Date();
@@ -25,57 +19,62 @@ export function StatsSection() {
   useEffect(() => {
     if (!sectionRef.current) return;
 
-    const numberEls =
-      sectionRef.current.querySelectorAll<HTMLElement>("[data-count]");
-    const labelEls =
-      sectionRef.current.querySelectorAll<HTMLElement>("[data-label]");
+    const el = sectionRef.current;
+    let cleanup: (() => void) | undefined;
 
-    gsap.set([...numberEls, ...labelEls], { opacity: 0, y: 30 });
+    import("gsap").then(({ gsap }) =>
+      import("gsap/ScrollTrigger").then(({ ScrollTrigger }) => {
+        gsap.registerPlugin(ScrollTrigger);
 
-    ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top 80%",
-      once: true,
-      onEnter: () => {
-        // Animate numbers counting up
-        numberEls.forEach((el, i) => {
-          const target = parseInt(el.dataset.count || "0", 10);
-          const obj = { val: 0 };
+        const numberEls = el.querySelectorAll<HTMLElement>("[data-count]");
+        const labelEls = el.querySelectorAll<HTMLElement>("[data-label]");
 
-          gsap.to(el, {
-            opacity: 1,
-            y: 0,
-            duration: 0.5,
-            delay: i * 0.1,
-            ease: "power2.out",
-          });
+        gsap.set([...numberEls, ...labelEls], { opacity: 0, y: 30 });
 
-          gsap.to(obj, {
-            val: target,
-            duration: 1.5,
-            delay: i * 0.1,
-            ease: "power2.out",
-            onUpdate: () => {
-              el.textContent = String(Math.round(obj.val));
-            },
-          });
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 80%",
+          once: true,
+          onEnter: () => {
+            numberEls.forEach((numEl, i) => {
+              const target = parseInt(numEl.dataset.count || "0", 10);
+              const obj = { val: 0 };
+
+              gsap.to(numEl, {
+                opacity: 1,
+                y: 0,
+                duration: 0.5,
+                delay: i * 0.1,
+                ease: "power2.out",
+              });
+
+              gsap.to(obj, {
+                val: target,
+                duration: 1.5,
+                delay: i * 0.1,
+                ease: "power2.out",
+                onUpdate: () => {
+                  numEl.textContent = String(Math.round(obj.val));
+                },
+              });
+            });
+
+            gsap.to(labelEls, {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              stagger: 0.1,
+              delay: 0.2,
+              ease: "power2.out",
+            });
+          },
         });
 
-        // Fade up labels
-        gsap.to(labelEls, {
-          opacity: 1,
-          y: 0,
-          duration: 0.6,
-          stagger: 0.1,
-          delay: 0.2,
-          ease: "power2.out",
-        });
-      },
-    });
+        cleanup = () => ScrollTrigger.getAll().forEach((t) => t.kill());
+      }),
+    );
 
-    return () => {
-      ScrollTrigger.getAll().forEach((t) => t.kill());
-    };
+    return () => cleanup?.();
   }, []);
 
   return (
