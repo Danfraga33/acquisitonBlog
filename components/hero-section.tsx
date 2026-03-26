@@ -1,6 +1,25 @@
+import { useEffect, useRef } from "react";
 import { Link } from "react-router";
+import gsap from "gsap";
 
 export function HeroSection() {
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!contentRef.current) return;
+
+    const els = contentRef.current.querySelectorAll("[data-hero]");
+    gsap.set(els, { opacity: 0, y: 50 });
+    gsap.to(els, {
+      opacity: 1,
+      y: 0,
+      duration: 1,
+      ease: "power3.out",
+      stagger: 0.2,
+      delay: 0.3,
+    });
+  }, []);
+
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6">
       {/* Background image */}
@@ -12,21 +31,33 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-black/50" />
       {/* Bottom fade into next section bg-secondary/30 */}
       <div className="absolute right-0 bottom-0 left-0 h-64 bg-gradient-to-b from-transparent to-black" />
-      <div className="relative z-10 mx-auto max-w-4xl text-center">
-        <p className="mb-6 text-sm tracking-[0.3em] uppercase">
+      <div
+        ref={contentRef}
+        className="relative z-10 mx-auto max-w-4xl text-center"
+      >
+        <p data-hero className="mb-6 text-sm tracking-[0.3em] uppercase">
           A Personal Chronicle
         </p>
-        <h1 className="mb-8 font-serif text-5xl leading-[1.1] md:text-7xl lg:text-8xl">
+        <h1
+          data-hero
+          className="mb-8 font-serif text-5xl leading-[1.1] md:text-7xl lg:text-8xl"
+        >
           The Acquisition
           <br />
           <span className="text-primary">Journey</span>
         </h1>
-        <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-white md:text-xl">
+        <p
+          data-hero
+          className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-white md:text-xl"
+        >
           Documenting every step of my path to business ownership. From deal
           sourcing to due diligence, negotiations to closing - the unfiltered
           story of acquiring a company.
         </p>
-        <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <div
+          data-hero
+          className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+        >
           <Link
             to="#about"
             className="bg-primary text-primary-foreground rounded-full px-8 py-3 text-sm tracking-wide transition-opacity hover:opacity-90"
