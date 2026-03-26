@@ -138,7 +138,7 @@ export default function AdminPage() {
                       {post.title}
                     </h3>
                     <span
-                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs ${
+                      className={`shrink-0 cursor-default rounded-full px-2.5 py-0.5 text-xs ${
                         post.published
                           ? "bg-green-900/30 text-green-400"
                           : "bg-yellow-900/30 text-yellow-400"
