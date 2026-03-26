@@ -18,6 +18,7 @@
     "@tiptap/pm": "^3.20.5",
     "@tiptap/react": "^3.20.5",
     "@tiptap/starter-kit": "^3.20.5",
+    "gsap": "^3.14.2",
     "isbot": "^5.1.31",
     "lucide-react": "^0.577.0",
     "react": "^19.2.4",
