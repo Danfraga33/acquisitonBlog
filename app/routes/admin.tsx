@@ -1,0 +1,178 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router";
+import { supabase, type Post } from "../../lib/supabase";
+
+const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string;
+
+function PasswordGate({ onAuth }: { onAuth: () => void }) {
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === ADMIN_PASSWORD) {
+      sessionStorage.setItem("admin_auth", "true");
+      onAuth();
+    } else {
+      setError(true);
+    }
+  };
+
+  return (
+    <div className="bg-background flex min-h-screen items-center justify-center px-6">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-6">
+        <div className="text-center">
+          <h1 className="font-serif text-3xl">Admin</h1>
+          <p className="text-muted-foreground mt-2 text-sm">
+            Enter password to continue
+          </p>
+        </div>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setError(false);
+          }}
+          className="border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary w-full rounded-lg border px-4 py-3 text-sm transition-colors focus:outline-none"
+          placeholder="Password"
+          autoFocus
+        />
+        {error && (
+          <p className="text-sm text-red-400">Incorrect password.</p>
+        )}
+        <button
+          type="submit"
+          className="bg-primary text-primary-foreground w-full rounded-full py-3 text-sm tracking-wide transition-opacity hover:opacity-90"
+        >
+          Enter
+        </button>
+      </form>
+    </div>
+  );
+}
+
+export default function AdminPage() {
+  const [authed, setAuthed] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return sessionStorage.getItem("admin_auth") === "true";
+  });
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!authed) return;
+    supabase
+      .from("posts")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .then(({ data }) => {
+        if (data) setPosts(data);
+        setLoading(false);
+      });
+  }, [authed]);
+
+  const handleDelete = async (id: string, title: string) => {
+    if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
+    await supabase.from("posts").delete().eq("id", id);
+    setPosts((prev) => prev.filter((p) => p.id !== id));
+  };
+
+  if (!authed) return <PasswordGate onAuth={() => setAuthed(true)} />;
+
+  return (
+    <div className="bg-background min-h-screen px-6 py-12">
+      <div className="mx-auto max-w-4xl">
+        <div className="mb-12 flex items-center justify-between">
+          <div>
+            <p className="text-muted-foreground mb-2 text-sm tracking-[0.3em] uppercase">
+              Admin
+            </p>
+            <h1 className="font-serif text-3xl md:text-4xl">Posts</h1>
+          </div>
+          <div className="flex gap-3">
+            <Link
+              to="/"
+              className="border-border hover:bg-accent rounded-full border px-6 py-2.5 text-sm tracking-wide transition-colors"
+            >
+              View Site
+            </Link>
+            <Link
+              to="/admin-new"
+              className="bg-primary text-primary-foreground rounded-full px-6 py-2.5 text-sm tracking-wide transition-opacity hover:opacity-90"
+            >
+              New Post
+            </Link>
+          </div>
+        </div>
+
+        {loading ? (
+          <div className="space-y-4">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="bg-card border-border animate-pulse rounded-lg border p-6"
+              >
+                <div className="bg-muted h-4 w-1/3 rounded" />
+              </div>
+            ))}
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="py-20 text-center">
+            <p className="text-muted-foreground text-lg">No posts yet.</p>
+            <Link
+              to="/admin-new"
+              className="text-primary mt-4 inline-block text-sm underline-offset-4 hover:underline"
+            >
+              Create your first post
+            </Link>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {posts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-card border-border flex items-center justify-between rounded-lg border p-5"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex items-center gap-3">
+                    <h3 className="truncate font-serif text-lg">
+                      {post.title}
+                    </h3>
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs ${
+                        post.published
+                          ? "bg-green-900/30 text-green-400"
+                          : "bg-yellow-900/30 text-yellow-400"
+                      }`}
+                    >
+                      {post.published ? "Published" : "Draft"}
+                    </span>
+                  </div>
+                  <div className="text-muted-foreground flex gap-4 text-xs">
+                    <span>{post.category}</span>
+                    <span>{post.date}</span>
+                  </div>
+                </div>
+                <div className="ml-4 flex shrink-0 gap-2">
+                  <Link
+                    to={`/admin-edit/${post.id}`}
+                    className="border-border hover:bg-accent rounded-full border px-4 py-1.5 text-xs tracking-wide transition-colors"
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(post.id, post.title)}
+                    className="cursor-pointer rounded-full border border-red-800 px-4 py-1.5 text-xs tracking-wide text-red-400 transition-colors hover:bg-red-900/30"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
