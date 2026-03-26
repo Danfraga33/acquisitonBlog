@@ -2,7 +2,11 @@
   "permissions": {
     "allow": [
       "Skill(update-config)",
-      "Skill(update-config:*)"
+      "Skill(update-config:*)",
+      "mcp__serena__get_symbols_overview",
+      "mcp__serena__list_dir",
+      "Bash(xargs grep:*)",
+      "Bash(npx react-router:*)"
     ],
     "additionalDirectories": [
       "c:\\Users\\danfr\\OneDrive\\Desktop\\Net Worth\\FragaVentures\\Online Brand\\acquisitionBlog"
