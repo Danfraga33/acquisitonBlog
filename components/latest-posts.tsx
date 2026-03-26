@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { supabase, type Post } from "../lib/supabase";
+import { useScrollFadeUp } from "../lib/useScrollFadeUp";
 
 export function LatestPosts() {
+  const ref = useScrollFadeUp<HTMLElement>();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -20,14 +22,14 @@ export function LatestPosts() {
   }, []);
 
   return (
-    <section id="posts" className="px-6 py-24 md:py-32">
+    <section ref={ref} id="posts" className="px-6 py-24 md:py-32">
       <div className="mx-auto max-w-6xl">
         <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-muted-foreground mb-4 text-sm tracking-[0.3em] uppercase">
+            <p data-animate className="text-muted-foreground mb-4 text-sm tracking-[0.3em] uppercase">
               From the Blog
             </p>
-            <h2 className="font-serif text-3xl md:text-5xl">Latest Updates</h2>
+            <h2 data-animate className="font-serif text-3xl md:text-5xl">Latest Updates</h2>
           </div>
           <Link
             to="/blog"

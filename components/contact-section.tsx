@@ -1,10 +1,14 @@
+import { useScrollFadeUp } from "../lib/useScrollFadeUp";
+
 export function ContactSection() {
+  const ref = useScrollFadeUp<HTMLElement>();
+
   return (
-    <section id="contact" className="py-24 px-6 border-t border-border">
+    <section ref={ref} id="contact" className="py-24 px-6 border-t border-border">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-16">
-          <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-4">Get in Touch</p>
-          <h3 className="text-3xl md:text-4xl font-serif mb-4">Connect</h3>
+          <p data-animate className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-4">Get in Touch</p>
+          <h3 data-animate className="text-3xl md:text-4xl font-serif mb-4">Connect</h3>
           <div className="h-px w-24 bg-primary mx-auto opacity-50" />
         </div>
         <form className="space-y-8">

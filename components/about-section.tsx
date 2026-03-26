@@ -1,8 +1,12 @@
 import { Link } from "react-router";
+import { useScrollFadeUp } from "../lib/useScrollFadeUp";
 
 export function AboutSection() {
+  const ref = useScrollFadeUp<HTMLElement>();
+
   return (
     <section
+      ref={ref}
       id="about"
       className="bg-secondary/30 relative px-6 py-24 md:py-32"
     >
@@ -10,28 +14,40 @@ export function AboutSection() {
       <div className="mx-auto max-w-6xl">
         <div className="grid items-center gap-12 md:grid-cols-2 md:gap-20">
           <div>
-            <p className="text-muted-foreground mb-4 text-sm tracking-[0.3em] uppercase">
+            <p
+              data-animate
+              className="text-muted-foreground mb-4 text-sm tracking-[0.3em] uppercase"
+            >
               About This Journey
             </p>
-            <h2 className="text-foreground mb-6 font-serif text-3xl leading-tight text-balance md:text-5xl">
+            <h2
+              data-animate
+              className="text-foreground mb-6 font-serif text-3xl leading-tight text-balance md:text-5xl"
+            >
               Building wealth through
               <br />
               <span className="text-primary">acquisition</span>
             </h2>
           </div>
 
-          <div className="space-y-6">
-            <p className="text-muted-foreground text-lg leading-relaxed">
+          <div>
+            <p
+              data-animate
+              className="text-muted-foreground text-lg leading-relaxed"
+            >
               Always knew I'd own something. This blog is the record of actually
               doing it - the search for the right business, the deals that
               didn't work out, and everything I'm learning along the way.
             </p>
-            <p className="text-muted-foreground leading-relaxed">
+            <p
+              data-animate
+              className="text-muted-foreground mt-6 leading-relaxed"
+            >
               No guru playbook. Just honest, in-the-moment writing from someone
               figuring out what it actually takes to buy and run a small
               software business.
             </p>
-            <div className="pt-4">
+            <div data-animate className="pt-4">
               <Link
                 to="#posts"
                 className="text-primary inline-flex items-center gap-2 underline-offset-4 hover:underline hover:transition-all hover:duration-300"
