@@ -1,73 +1,50 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router";
-import { supabase, type Post } from "../../lib/supabase";
+import { data, useLoaderData } from "react-router";
+import type { Route } from "./+types/post";
+import { supabaseServer } from "../../lib/supabase.server";
 import { PostLayout } from "../../components/post-layout";
 
-interface PostWithNav extends Post {
-  next_post_slug: string | null;
-  prev_post_slug: string | null;
+export async function loader({ params }: Route.LoaderArgs) {
+  const { slug } = params;
+
+  const { data: post, error } = await supabaseServer
+    .from("posts")
+    .select("*")
+    .eq("slug", slug)
+    .eq("published", true)
+    .single();
+
+  if (error || !post) {
+    throw data("Post not found", { status: 404 });
+  }
+
+  const [prevPost, nextPost] = await Promise.all([
+    post.prev_post_slug
+      ? supabaseServer
+          .from("posts")
+          .select("title, slug")
+          .eq("slug", post.prev_post_slug)
+          .single()
+          .then(({ data: p }) =>
+            p ? { title: p.title, href: `/posts/${p.slug}` } : undefined,
+          )
+      : Promise.resolve(undefined),
+    post.next_post_slug
+      ? supabaseServer
+          .from("posts")
+          .select("title, slug")
+          .eq("slug", post.next_post_slug)
+          .single()
+          .then(({ data: n }) =>
+            n ? { title: n.title, href: `/posts/${n.slug}` } : undefined,
+          )
+      : Promise.resolve(undefined),
+  ]);
+
+  return { post, prevPost, nextPost };
 }
 
 export default function PostPage() {
-  const { slug } = useParams<{ slug: string }>();
-  const [post, setPost] = useState<PostWithNav | null>(null);
-  const [prevPost, setPrevPost] = useState<{ title: string; href: string } | undefined>();
-  const [nextPost, setNextPost] = useState<{ title: string; href: string } | undefined>();
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-
-  useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
-    setNotFound(false);
-
-    supabase
-      .from("posts")
-      .select("*")
-      .eq("slug", slug)
-      .eq("published", true)
-      .single()
-      .then(async ({ data, error }) => {
-        if (error || !data) {
-          setNotFound(true);
-          setLoading(false);
-          return;
-        }
-        setPost(data as PostWithNav);
-
-        const navFetches = [];
-        if (data.prev_post_slug) {
-          navFetches.push(
-            supabase.from("posts").select("title, slug").eq("slug", data.prev_post_slug).single()
-              .then(({ data: p }) => { if (p) setPrevPost({ title: p.title, href: `/posts/${p.slug}` }); })
-          );
-        }
-        if (data.next_post_slug) {
-          navFetches.push(
-            supabase.from("posts").select("title, slug").eq("slug", data.next_post_slug).single()
-              .then(({ data: n }) => { if (n) setNextPost({ title: n.title, href: `/posts/${n.slug}` }); })
-          );
-        }
-        await Promise.all(navFetches);
-        setLoading(false);
-      });
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-      </div>
-    );
-  }
-
-  if (notFound || !post) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-muted-foreground">Post not found.</p>
-      </div>
-    );
-  }
+  const { post, prevPost, nextPost } = useLoaderData<typeof loader>();
 
   return (
     <PostLayout

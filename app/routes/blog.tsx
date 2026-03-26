@@ -1,24 +1,21 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router";
-import { supabase, type Post } from "../../lib/supabase";
+import { useLoaderData, Link } from "react-router";
+import type { Route } from "./+types/blog";
+import { supabaseServer } from "../../lib/supabase.server";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 
-export default function BlogPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
+export async function loader(_: Route.LoaderArgs) {
+  const { data: posts } = await supabaseServer
+    .from("posts")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", { ascending: false });
 
-  useEffect(() => {
-    supabase
-      .from("posts")
-      .select("*")
-      .eq("published", true)
-      .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        if (data) setPosts(data);
-        setLoading(false);
-      });
-  }, []);
+  return { posts: posts ?? [] };
+}
+
+export default function BlogPage() {
+  const { posts } = useLoaderData<typeof loader>();
 
   return (
     <div className="bg-background min-h-screen">
@@ -32,21 +29,7 @@ export default function BlogPage() {
             <h1 className="font-serif text-4xl md:text-6xl">The Blog</h1>
           </div>
 
-          {loading ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {[...Array(6)].map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-card border-border animate-pulse rounded-lg border p-6"
-                >
-                  <div className="bg-muted mb-4 h-3 w-1/4 rounded" />
-                  <div className="bg-muted mb-3 h-5 w-3/4 rounded" />
-                  <div className="bg-muted mb-2 h-3 w-full rounded" />
-                  <div className="bg-muted h-3 w-2/3 rounded" />
-                </div>
-              ))}
-            </div>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <div className="py-20 text-center">
               <p className="text-muted-foreground text-lg">No posts yet.</p>
               <Link

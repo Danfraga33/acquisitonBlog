@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
-import { useParams, Link } from "react-router";
-import { supabase, type Post } from "../../lib/supabase";
+import { useLoaderData, Link } from "react-router";
+import type { Route } from "./+types/category";
+import { supabaseServer } from "../../lib/supabase.server";
 import { Header } from "../../components/header";
 import { Footer } from "../../components/footer";
 
@@ -13,26 +13,22 @@ const CATEGORY_MAP: Record<string, string> = {
   "behind-the-scenes": "Behind the Scenes",
 };
 
+export async function loader({ params }: Route.LoaderArgs) {
+  const { category } = params;
+  const categoryName = category ? (CATEGORY_MAP[category] ?? category) : "";
+
+  const { data: posts } = await supabaseServer
+    .from("posts")
+    .select("*")
+    .eq("published", true)
+    .eq("category", categoryName)
+    .order("created_at", { ascending: false });
+
+  return { posts: posts ?? [], categoryName };
+}
+
 export default function CategoryPage() {
-  const { category } = useParams<{ category: string }>();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const categoryName = category ? CATEGORY_MAP[category] ?? category : "";
-
-  useEffect(() => {
-    if (!categoryName) return;
-    supabase
-      .from("posts")
-      .select("*")
-      .eq("published", true)
-      .eq("category", categoryName)
-      .order("created_at", { ascending: false })
-      .then(({ data }) => {
-        if (data) setPosts(data);
-        setLoading(false);
-      });
-  }, [categoryName]);
+  const { posts, categoryName } = useLoaderData<typeof loader>();
 
   return (
     <div className="min-h-screen bg-background">
@@ -46,18 +42,7 @@ export default function CategoryPage() {
             <h1 className="text-4xl md:text-6xl font-serif">{categoryName}</h1>
           </div>
 
-          {loading ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="p-6 bg-card border border-border rounded-lg animate-pulse">
-                  <div className="h-3 bg-muted rounded w-1/4 mb-4" />
-                  <div className="h-5 bg-muted rounded w-3/4 mb-3" />
-                  <div className="h-3 bg-muted rounded w-full mb-2" />
-                  <div className="h-3 bg-muted rounded w-2/3" />
-                </div>
-              ))}
-            </div>
-          ) : posts.length === 0 ? (
+          {posts.length === 0 ? (
             <div className="text-center py-20">
               <p className="text-muted-foreground text-lg">No posts yet in this category.</p>
               <Link to="/" className="mt-4 inline-block text-sm text-primary hover:underline underline-offset-4">
