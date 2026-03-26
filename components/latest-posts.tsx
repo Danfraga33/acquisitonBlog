@@ -20,56 +20,73 @@ export function LatestPosts() {
   }, []);
 
   return (
-    <section id="posts" className="py-24 md:py-32 px-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-16">
+    <section id="posts" className="px-6 py-24 md:py-32">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-16 flex flex-col md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-muted-foreground text-sm tracking-[0.3em] uppercase mb-4">
+            <p className="text-muted-foreground mb-4 text-sm tracking-[0.3em] uppercase">
               From the Blog
             </p>
-            <h2 className="text-3xl md:text-5xl font-serif">Latest Updates</h2>
+            <h2 className="font-serif text-3xl md:text-5xl">Latest Updates</h2>
           </div>
-          <Link to="/blog" className="mt-4 md:mt-0 text-sm text-primary hover:underline underline-offset-4">
+          <Link
+            to="/blog"
+            className="text-primary mt-4 text-sm underline-offset-4 hover:underline md:mt-0"
+          >
             View all posts →
           </Link>
         </div>
 
         {loading ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="p-6 bg-card border border-border rounded-lg animate-pulse">
-                <div className="h-3 bg-muted rounded w-1/4 mb-4" />
-                <div className="h-5 bg-muted rounded w-3/4 mb-3" />
-                <div className="h-3 bg-muted rounded w-full mb-2" />
-                <div className="h-3 bg-muted rounded w-2/3" />
+              <div
+                key={i}
+                className="bg-card border-border animate-pulse rounded-lg border p-6"
+              >
+                <div className="bg-muted mb-4 h-3 w-1/4 rounded" />
+                <div className="bg-muted mb-3 h-5 w-3/4 rounded" />
+                <div className="bg-muted mb-2 h-3 w-full rounded" />
+                <div className="bg-muted h-3 w-2/3 rounded" />
               </div>
             ))}
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (
               <Link
                 key={post.id}
                 to={`/posts/${post.slug}`}
-                className="group block p-6 bg-card border border-border rounded-lg hover:border-primary/50 transition-colors"
+                className="group bg-card border-border hover:border-primary/50 block rounded-lg border p-6 transition-colors"
               >
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs text-primary tracking-wide uppercase">{post.category}</span>
-                  <span className="text-xs text-muted-foreground">{post.date}</span>
+                <div className="mb-4 flex items-center justify-between">
+                  <span className="text-primary text-xs tracking-wide uppercase">
+                    {post.category}
+                  </span>
+                  <span className="text-muted-foreground text-xs">
+                    {post.date}
+                  </span>
                 </div>
-                <h3 className="text-xl font-serif mb-3 group-hover:text-primary transition-colors">
+                <h3 className="group-hover:text-primary mb-3 font-serif text-xl transition-colors">
                   {post.title}
                 </h3>
-                <p className="text-muted-foreground text-sm leading-relaxed mb-4">{post.excerpt}</p>
-                <div className="flex items-center gap-1 text-sm text-primary">
+                <p className="text-muted-foreground mb-4 text-sm leading-relaxed">
+                  {post.excerpt}
+                </p>
+                <div className="text-primary flex items-center gap-1 text-sm">
                   Read more
                   <svg
-                    className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 17L17 7M7 7h10v10" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 17L17 7M7 7h10v10"
+                    />
                   </svg>
                 </div>
               </Link>
