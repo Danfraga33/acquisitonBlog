@@ -43,27 +43,39 @@ export function RichEditor({
   }, []);
 
   function convertMarkdownTables(text: string): string {
-    const isTableRow = (line: string) => /^\|.+\|$/.test(line.trim());
     const isSeparator = (line: string) => /^\|[\s\-:|]+\|$/.test(line.trim());
-
+    const isTableRow = (line: string) => /^\|.+\|$/.test(line.trim()) && !isSeparator(line);
     const parseRow = (line: string) =>
       line.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
 
-    const lines = text.split("\n");
+    // Split text into segments — each segment is either a table block or plain text
+    // First normalise: split by newlines, but also handle inline tables on one line
+    // by splitting on "| |" boundary where a separator row appears
+    let rawLines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+
+    // If single line contains |---|, it's an inline-collapsed table — split into rows
+    if (rawLines.length === 1 && rawLines[0].includes("|---|")) {
+      // Split by " | " at row boundaries: each row ends with | and next starts with |
+      rawLines = rawLines[0]
+        .replace(/\|\s*\|/g, "|\n|")
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean);
+    }
+
     const output: string[] = [];
     let i = 0;
 
-    while (i < lines.length) {
-      const line = lines[i];
+    while (i < rawLines.length) {
+      const line = rawLines[i];
 
-      // Detect start of markdown table: row followed by separator
-      if (isTableRow(line) && i + 1 < lines.length && isSeparator(lines[i + 1])) {
+      if (isTableRow(line) && i + 1 < rawLines.length && isSeparator(rawLines[i + 1])) {
         const headers = parseRow(line);
-        i += 2; // skip header and separator
+        i += 2;
 
         const rows: string[][] = [];
-        while (i < lines.length && isTableRow(lines[i])) {
-          rows.push(parseRow(lines[i]));
+        while (i < rawLines.length && isTableRow(rawLines[i])) {
+          rows.push(parseRow(rawLines[i]));
           i++;
         }
 
@@ -74,9 +86,8 @@ export function RichEditor({
 
         output.push(`<table><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table>`);
       } else {
-        // Regular line — wrap non-empty lines in <p>
         const trimmed = line.trim();
-        if (trimmed) {
+        if (trimmed && !isSeparator(trimmed)) {
           output.push(`<p>${trimmed}</p>`);
         }
         i++;
