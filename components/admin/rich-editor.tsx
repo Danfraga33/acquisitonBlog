@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Link from "@tiptap/extension-link";
+import { Table } from "@tiptap/extension-table";
+import { TableRow } from "@tiptap/extension-table-row";
+import { TableCell } from "@tiptap/extension-table-cell";
+import { TableHeader } from "@tiptap/extension-table-header";
 
 const MenuButton = ({
   onClick,
@@ -42,6 +46,10 @@ export function RichEditor({
     extensions: [
       StarterKit,
       Link.configure({ openOnClick: false }),
+      Table.configure({ resizable: true }),
+      TableRow,
+      TableHeader,
+      TableCell,
     ],
     content,
     onUpdate: ({ editor }) => {
@@ -65,6 +73,10 @@ export function RichEditor({
     }
   };
 
+  const insertTable = () => {
+    editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run();
+  };
+
   return (
     <div className="border-border rounded-lg border">
       <div className="border-border flex flex-wrap gap-1 border-b p-2">
@@ -81,17 +93,13 @@ export function RichEditor({
           Italic
         </MenuButton>
         <MenuButton
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 2 }).run()
-          }
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           active={editor.isActive("heading", { level: 2 })}
         >
           H2
         </MenuButton>
         <MenuButton
-          onClick={() =>
-            editor.chain().focus().toggleHeading({ level: 3 }).run()
-          }
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           active={editor.isActive("heading", { level: 3 })}
         >
           H3
@@ -123,11 +131,38 @@ export function RichEditor({
         <MenuButton onClick={setLink} active={editor.isActive("link")}>
           Link
         </MenuButton>
-        <MenuButton
-          onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        >
+        <MenuButton onClick={() => editor.chain().focus().setHorizontalRule().run()}>
           HR
         </MenuButton>
+        <div className="bg-border mx-1 w-px self-stretch" />
+        <MenuButton onClick={insertTable} active={editor.isActive("table")}>
+          Table
+        </MenuButton>
+        {editor.isActive("table") && (
+          <>
+            <MenuButton onClick={() => editor.chain().focus().addColumnBefore().run()}>
+              +Col←
+            </MenuButton>
+            <MenuButton onClick={() => editor.chain().focus().addColumnAfter().run()}>
+              +Col→
+            </MenuButton>
+            <MenuButton onClick={() => editor.chain().focus().deleteColumn().run()}>
+              -Col
+            </MenuButton>
+            <MenuButton onClick={() => editor.chain().focus().addRowBefore().run()}>
+              +Row↑
+            </MenuButton>
+            <MenuButton onClick={() => editor.chain().focus().addRowAfter().run()}>
+              +Row↓
+            </MenuButton>
+            <MenuButton onClick={() => editor.chain().focus().deleteRow().run()}>
+              -Row
+            </MenuButton>
+            <MenuButton onClick={() => editor.chain().focus().deleteTable().run()}>
+              Del Table
+            </MenuButton>
+          </>
+        )}
       </div>
       <EditorContent editor={editor} />
     </div>
