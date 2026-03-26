@@ -43,7 +43,7 @@ export function RichEditor({
   }, []);
 
   function convertMarkdownTables(text: string): string {
-    const isSeparator = (line: string) => /^\|[\s\-:|]+\|$/.test(line.trim());
+    const isSeparator = (line: string) => /^\|[-|\s:]+\|$/.test(line.trim()) && line.includes("-");
     const isTableRow = (line: string) => /^\|.+\|$/.test(line.trim()) && !isSeparator(line);
     const parseRow = (line: string) =>
       line.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
@@ -54,8 +54,7 @@ export function RichEditor({
     let rawLines = text.split("\n").map((l) => l.trim()).filter(Boolean);
 
     // If single line contains |---|, it's an inline-collapsed table — split into rows
-    if (rawLines.length === 1 && rawLines[0].includes("|---|")) {
-      // Split by " | " at row boundaries: each row ends with | and next starts with |
+    if (rawLines.length === 1 && rawLines[0].includes("|")) {
       rawLines = rawLines[0]
         .replace(/\|\s*\|/g, "|\n|")
         .split("\n")
