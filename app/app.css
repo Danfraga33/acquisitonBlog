@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@plugin '@tailwindcss/typography';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -126,4 +127,98 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Post content prose overrides */
+.prose.prose-invert h2 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.5rem;
+  color: var(--foreground);
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .prose.prose-invert h2 {
+    font-size: 1.875rem;
+  }
+}
+
+.prose.prose-invert h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: 1.25rem;
+  color: var(--foreground);
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose.prose-invert > div > p:first-child {
+  font-size: 1.25rem;
+  color: var(--muted-foreground);
+  line-height: 1.625;
+  margin-bottom: 2rem;
+}
+
+.prose.prose-invert p {
+  color: var(--muted-foreground);
+  line-height: 1.625;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.prose.prose-invert ul {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.prose.prose-invert ul li {
+  color: var(--muted-foreground);
+  display: flex;
+  gap: 0.75rem;
+  padding-left: 0;
+  margin: 0;
+}
+
+.prose.prose-invert ul li::before {
+  content: "—";
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.prose.prose-invert ul li::marker {
+  content: none;
+}
+
+.prose.prose-invert ul li p {
+  margin: 0;
+  font-size: inherit;
+}
+
+.prose.prose-invert blockquote {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: 0.5rem;
+  padding: 1rem 1.25rem;
+  font-style: normal;
+}
+
+.prose.prose-invert a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.prose.prose-invert strong {
+  color: var(--foreground);
 }
