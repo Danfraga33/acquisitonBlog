@@ -1,25 +1,9 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router";
-import { supabase, type Post } from "../lib/supabase";
+import type { Post } from "../lib/supabase";
 import { useScrollFadeUp } from "../lib/useScrollFadeUp";
 
-export function LatestPosts() {
+export function LatestPosts({ posts }: { posts: Post[] }) {
   const ref = useScrollFadeUp<HTMLElement>();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    supabase
-      .from("posts")
-      .select("*")
-      .eq("published", true)
-      .order("created_at", { ascending: false })
-      .limit(6)
-      .then(({ data }) => {
-        if (data) setPosts(data);
-        setLoading(false);
-      });
-  }, []);
 
   return (
     <section ref={ref} id="posts" className="px-6 py-24 md:py-32">
@@ -39,20 +23,8 @@ export function LatestPosts() {
           </Link>
         </div>
 
-        {loading ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="bg-card border-border animate-pulse rounded-lg border p-6"
-              >
-                <div className="bg-muted mb-4 h-3 w-1/4 rounded" />
-                <div className="bg-muted mb-3 h-5 w-3/4 rounded" />
-                <div className="bg-muted mb-2 h-3 w-full rounded" />
-                <div className="bg-muted h-3 w-2/3 rounded" />
-              </div>
-            ))}
-          </div>
+        {posts.length === 0 ? (
+          <p className="text-muted-foreground">No posts yet.</p>
         ) : (
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (

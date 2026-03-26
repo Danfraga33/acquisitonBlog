@@ -1,5 +1,7 @@
 import type { Route } from "./+types/home";
+import { useLoaderData } from "react-router";
 import { Welcome } from "../welcome/welcome";
+import { supabaseServer } from "../../lib/supabase.server";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -8,6 +10,18 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+export async function loader(_: Route.LoaderArgs) {
+  const { data: posts } = await supabaseServer
+    .from("posts")
+    .select("*")
+    .eq("published", true)
+    .order("created_at", { ascending: false })
+    .limit(6);
+
+  return { posts: posts ?? [] };
+}
+
 export default function Home() {
-  return <Welcome />;
+  const { posts } = useLoaderData<typeof loader>();
+  return <Welcome posts={posts} />;
 }
