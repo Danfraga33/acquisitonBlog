@@ -42,6 +42,29 @@ export function RichEditor({
     setMounted(true);
   }, []);
 
+  function markdownTableToHtml(text: string): string | null {
+    const lines = text.trim().split("\n");
+    if (lines.length < 2) return null;
+
+    const isTableRow = (line: string) => line.trim().startsWith("|") && line.trim().endsWith("|");
+    const isSeparator = (line: string) => /^\|[\s\-:|]+\|/.test(line.trim());
+
+    if (!isTableRow(lines[0]) || !isSeparator(lines[1])) return null;
+
+    const parseRow = (line: string) =>
+      line.trim().replace(/^\||\|$/g, "").split("|").map((c) => c.trim());
+
+    const headers = parseRow(lines[0]);
+    const rows = lines.slice(2).filter(isTableRow).map(parseRow);
+
+    const headerHtml = headers.map((h) => `<th>${h}</th>`).join("");
+    const rowsHtml = rows
+      .map((row) => `<tr>${row.map((c) => `<td>${c}</td>`).join("")}</tr>`)
+      .join("");
+
+    return `<table><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table>`;
+  }
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -59,6 +82,15 @@ export function RichEditor({
       attributes: {
         class:
           "prose prose-invert prose-sm max-w-none min-h-[300px] p-4 focus:outline-none",
+      },
+      handlePaste(_view, event) {
+        const text = event.clipboardData?.getData("text/plain") ?? "";
+        const tableHtml = markdownTableToHtml(text);
+        if (!tableHtml) return false;
+
+        event.preventDefault();
+        editor?.commands.insertContent(tableHtml);
+        return true;
       },
     },
     immediatelyRender: false,
