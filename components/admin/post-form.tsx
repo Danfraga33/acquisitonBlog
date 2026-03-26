@@ -44,7 +44,12 @@ export function PostForm({
   const [content, setContent] = useState(initial?.content ?? "");
   const [category, setCategory] = useState(initial?.category ?? CATEGORIES[0]);
   const [date, setDate] = useState(
-    initial?.date ?? new Date().toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }),
+    initial?.date ??
+      new Date().toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      })
   );
   const [readTime, setReadTime] = useState(initial?.read_time ?? "");
   const [published, setPublished] = useState(initial?.published ?? false);
@@ -182,7 +187,7 @@ export function PostForm({
             }`}
           />
         </button>
-        <span className="text-sm text-foreground">
+        <span className="text-foreground text-sm">
           {published ? "Published" : "Draft"}
         </span>
       </div>
@@ -191,7 +196,7 @@ export function PostForm({
         <button
           type="submit"
           disabled={submitting}
-          className="bg-primary text-primary-foreground rounded-full px-8 py-3 text-sm tracking-wide transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="bg-primary text-primary-foreground cursor-pointer rounded-full px-8 py-3 text-sm tracking-wide transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {submitting ? "Saving..." : "Save Post"}
         </button>
