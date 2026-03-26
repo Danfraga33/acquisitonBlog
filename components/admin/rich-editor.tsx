@@ -40,7 +40,7 @@ export function RichEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ codeBlock: true }),
+      StarterKit,
       Link.configure({ openOnClick: false }),
     ],
     content,
