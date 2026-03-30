@@ -11,17 +11,24 @@ export function meta({}: Route.MetaArgs) {
 }
 
 export async function loader(_: Route.LoaderArgs) {
-  const { data: posts } = await supabaseServer
-    .from("posts")
-    .select("*")
-    .eq("published", true)
-    .order("created_at", { ascending: false })
-    .limit(6);
+  const [{ data: posts }, { data: statsRows }] = await Promise.all([
+    supabaseServer
+      .from("posts")
+      .select("*")
+      .eq("published", true)
+      .order("created_at", { ascending: false })
+      .limit(6),
+    supabaseServer.from("stats").select("key, value"),
+  ]);
 
-  return { posts: posts ?? [] };
+  const statsMap = Object.fromEntries(
+    (statsRows ?? []).map(({ key, value }: { key: string; value: number }) => [key, value]),
+  );
+
+  return { posts: posts ?? [], stats: statsMap };
 }
 
 export default function Home() {
-  const { posts } = useLoaderData<typeof loader>();
-  return <Welcome posts={posts} />;
+  const { posts, stats } = useLoaderData<typeof loader>();
+  return <Welcome posts={posts} stats={stats} />;
 }

@@ -7,14 +7,16 @@ import { ContactSection } from "components/contact-section";
 import { Footer } from "components/footer";
 import type { Post } from "lib/supabase";
 
-export function Welcome({ posts }: { posts: Post[] }) {
+type StatsMap = Record<string, number>;
+
+export function Welcome({ posts, stats }: { posts: Post[]; stats: StatsMap }) {
   return (
     <>
       <Header />
       <main className="min-h-screen bg-background">
         <HeroSection />
         <AboutSection />
-        <StatsSection />
+        <StatsSection stats={stats} />
         <LatestPosts posts={posts} />
         <ContactSection />
       </main>

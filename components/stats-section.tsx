@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { SEARCH_START_DATE, STATS } from "./data";
+import { SEARCH_START_DATE } from "./data";
 
 function getMonthsSearching() {
   const now = new Date();
@@ -8,12 +8,17 @@ function getMonthsSearching() {
   return Math.max(0, years * 12 + months);
 }
 
-export function StatsSection() {
+type StatsMap = Record<string, number>;
+
+export function StatsSection({ stats }: { stats: StatsMap }) {
   const sectionRef = useRef<HTMLElement>(null);
 
   const allStats = [
     { value: String(getMonthsSearching()), label: "Months Searching" },
-    ...STATS,
+    { value: String(stats.deals_reviewed ?? 0), label: "Deals Reviewed" },
+    { value: String(stats.lois_submitted ?? 0), label: "LOIs Submitted" },
+    { value: String(stats.businesses_under_review ?? 0), label: "Businesses Under Review" },
+    { value: String(stats.acquisitions ?? 0), label: "No. Acquisitions" },
   ];
 
   useEffect(() => {
