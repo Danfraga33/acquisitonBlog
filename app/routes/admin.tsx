@@ -2,6 +2,69 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router";
 import { supabase, type Post } from "../../lib/supabase";
 
+type StatsMap = Record<string, number>;
+
+const STAT_KEYS: { key: string; label: string }[] = [
+  { key: "deals_reviewed", label: "Deals Reviewed" },
+  { key: "lois_submitted", label: "LOIs Submitted" },
+  { key: "businesses_under_review", label: "Businesses Under Review" },
+  { key: "acquisitions", label: "No. Acquisitions" },
+];
+
+function StatsEditor() {
+  const [stats, setStats] = useState<StatsMap>({});
+  const [saving, setSaving] = useState<string | null>(null);
+
+  useEffect(() => {
+    supabase
+      .from("stats")
+      .select("key, value")
+      .then(({ data }) => {
+        if (data) {
+          setStats(Object.fromEntries(data.map(({ key, value }: { key: string; value: number }) => [key, value])));
+        }
+      });
+  }, []);
+
+  const update = async (key: string, delta: number) => {
+    const next = Math.max(0, (stats[key] ?? 0) + delta);
+    setStats((prev) => ({ ...prev, [key]: next }));
+    setSaving(key);
+    await supabase.from("stats").upsert({ key, value: next });
+    setSaving(null);
+  };
+
+  return (
+    <div className="bg-card border-border mb-10 rounded-lg border p-6">
+      <h2 className="font-serif text-xl mb-5">Stats</h2>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        {STAT_KEYS.map(({ key, label }) => (
+          <div key={key} className="flex flex-col items-center gap-2">
+            <p className="text-muted-foreground text-xs tracking-wide uppercase text-center">{label}</p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => update(key, -1)}
+                className="border-border hover:bg-accent flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border text-sm transition-colors"
+              >
+                −
+              </button>
+              <span className="font-serif text-2xl w-8 text-center">
+                {saving === key ? "…" : (stats[key] ?? 0)}
+              </span>
+              <button
+                onClick={() => update(key, 1)}
+                className="border-border hover:bg-accent flex h-7 w-7 cursor-pointer items-center justify-center rounded-full border text-sm transition-colors"
+              >
+                +
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const ADMIN_PASSWORD = import.meta.env.VITE_ADMIN_PASSWORD as string;
 
 function PasswordGate({ onAuth }: { onAuth: () => void }) {
@@ -103,6 +166,8 @@ export default function AdminPage() {
             </Link>
           </div>
         </div>
+
+        <StatsEditor />
 
         {loading ? (
           <div className="space-y-4">
