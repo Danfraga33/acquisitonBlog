@@ -44,8 +44,8 @@ export function AboutSection() {
               className="text-muted-foreground mt-6 leading-relaxed"
             >
               No guru playbook. Just honest, in-the-moment writing from someone
-              figuring out what it actually takes to buy and run a small
-              software business.
+              figuring out what it actually takes to find, acquire, and
+              build a business.
             </p>
             <div data-animate className="pt-4">
               <Link
