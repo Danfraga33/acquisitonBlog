@@ -144,11 +144,11 @@ export function PostForm({
             Read Time
           </label>
           <input
-            type="text"
-            value={readTime}
-            onChange={(e) => setReadTime(e.target.value)}
+            type="number"
+            value={readTime.replace(" min read", "")}
+            onChange={(e) => setReadTime(e.target.value ? `${e.target.value} min read` : "")}
             className={inputClass}
-            placeholder="5 min read"
+            placeholder="5"
           />
         </div>
       </div>
