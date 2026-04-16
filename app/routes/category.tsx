@@ -7,7 +7,7 @@ import { Footer } from "../../components/footer";
 const CATEGORY_MAP: Record<string, string> = {
   "deal-journal": "Deal Journal",
   "frameworks": "Frameworks",
-  "structured-notes": "Structured Notes",
+  "vertical-research": "Vertical Research",
   "learnings": "Learnings",
   "operator-lens": "Operator Lens",
   "behind-the-scenes": "Behind the Scenes",

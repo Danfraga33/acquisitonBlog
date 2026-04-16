@@ -1,7 +1,7 @@
 export const REVOLVER_ITEMS = [
   { num: "01", label: "Deal Journal" },
   { num: "02", label: "Frameworks" },
-  { num: "03", label: "Structured Notes" },
+  { num: "03", label: "Vertical Research" },
   { num: "04", label: "Learnings" },
   { num: "05", label: "Operator Lens" },
   { num: "06", label: "Behind the Scenes" },
@@ -70,7 +70,7 @@ export const STATS = [
 export const EXPLORE_PAGES = [
   { title: "Deal Journal", href: "/category/deal-journal" },
   { title: "Frameworks", href: "/category/frameworks" },
-  { title: "Structured Notes", href: "/category/structured-notes" },
+  { title: "Vertical Research", href: "/category/vertical-research" },
   { title: "Learnings", href: "/category/learnings" },
   { title: "Operator Lens", href: "/category/operator-lens" },
   { title: "Behind the Scenes", href: "/category/behind-the-scenes" },
