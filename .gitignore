@@ -11,3 +11,6 @@
 
 # Serena
 .serena/project.yml
+
+# Claude Code
+.claude/
