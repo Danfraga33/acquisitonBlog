@@ -4,7 +4,7 @@ import { RichEditor } from "./rich-editor";
 const CATEGORIES = [
   "Deal Journal",
   "Frameworks",
-  "Structured Notes",
+  "Vertical Research",
   "Learnings",
   "Operator Lens",
   "Behind the Scenes",
