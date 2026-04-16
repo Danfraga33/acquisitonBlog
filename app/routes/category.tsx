@@ -9,7 +9,7 @@ const CATEGORY_MAP: Record<string, string> = {
   "frameworks": "Frameworks",
   "vertical-research": "Vertical Research",
   "learnings": "Learnings",
-  "operator-lens": "Operator Lens",
+  "the-playbook": "The Playbook",
   "behind-the-scenes": "Behind the Scenes",
 };
 

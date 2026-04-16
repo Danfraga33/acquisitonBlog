@@ -3,7 +3,7 @@ export const REVOLVER_ITEMS = [
   { num: "02", label: "Frameworks" },
   { num: "03", label: "Vertical Research" },
   { num: "04", label: "Learnings" },
-  { num: "05", label: "Operator Lens" },
+  { num: "05", label: "The Playbook" },
   { num: "06", label: "Behind the Scenes" },
 ];
 
@@ -72,6 +72,6 @@ export const EXPLORE_PAGES = [
   { title: "Frameworks", href: "/category/frameworks" },
   { title: "Vertical Research", href: "/category/vertical-research" },
   { title: "Learnings", href: "/category/learnings" },
-  { title: "Operator Lens", href: "/category/operator-lens" },
+  { title: "The Playbook", href: "/category/the-playbook" },
   { title: "Behind the Scenes", href: "/category/behind-the-scenes" },
 ];

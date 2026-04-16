@@ -6,7 +6,7 @@ const CATEGORIES = [
   "Frameworks",
   "Vertical Research",
   "Learnings",
-  "Operator Lens",
+  "The Playbook",
   "Behind the Scenes",
 ];
 
