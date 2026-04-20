@@ -218,6 +218,20 @@ export default function AdminPage() {
                   </div>
                 </div>
                 <div className="ml-4 flex shrink-0 gap-2">
+                  {post.published ? (
+                    <a
+                      href={`https://closingnotes.co/posts/${post.slug}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="border-border hover:bg-accent rounded-full border px-4 py-1.5 text-xs tracking-wide transition-colors"
+                    >
+                      Preview
+                    </a>
+                  ) : (
+                    <span className="border-border text-muted-foreground cursor-not-allowed rounded-full border px-4 py-1.5 text-xs tracking-wide opacity-40">
+                      Preview
+                    </span>
+                  )}
                   <Link
                     to={`/admin-edit/${post.id}`}
                     className="border-border hover:bg-accent rounded-full border px-4 py-1.5 text-xs tracking-wide transition-colors"
